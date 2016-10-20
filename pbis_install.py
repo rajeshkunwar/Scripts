@@ -14,16 +14,16 @@ class pbis:
         #Method to check pbis dir
 
         def pbisDir(self):
-                return os.path.isdir(self.dir)
+                return os.path.isdir(self.dir)  # self can access the property of the class and alawys refers to the instance of the class.
 
-# Method to check the pbis version
+        # Method to check the pbis version
 
         def pbisVersion(self):
                 version = subprocess.Popen(self.version, stdout=subprocess.PIPE,shell=True)
                 version, err = version.communicate()
                 print "The installed PBIS version is:", version
 
-#Method for redhat install
+        #Method for redhat install
 
         def redhatInstall(self):
                 repo = "wget -O /etc/yum.repos.d/pbiso.repo http://repo.pbis.beyondtrust.com/yum/pbiso.repo"
@@ -32,7 +32,7 @@ class pbis:
                 os.system("yum clean all")
                 os.system("yum install -y pbis-open")
 
-#Method for ubuntu install
+        #Method for ubuntu install
 
         def ubuntuInstall(self):
                 os.system("wget -O - http://repo.pbis.beyondtrust.com/yum/RPM-GPG-KEY-pbis|sudo apt-key add -")
@@ -46,9 +46,9 @@ else:
         osType = "lsb_release -a | grep -i 'description'"
         osType = subprocess.Popen(osType, stdout=subprocess.PIPE,shell=True)
         output, err = osType.communicate()
-        version = pbis()
-        install = pbis()
-        dir = pbis()
+        version = pbis()        # One instance
+        install = pbis()        # Another instance
+        dir = pbis()            # One more
         if "Red Hat" in output:
                 print "Redhat system found"
                 time.sleep(2)
