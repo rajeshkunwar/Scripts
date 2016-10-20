@@ -54,7 +54,7 @@ else:
                         answer = raw_input("Update PBIS to latest version? (Y/N)").lower()  
 
                         if answer == "y" or answer == "yes":
-                                redhatInstall()
+                                redhatInstall()   # Calling the redhatInstall method
 
                 else:
                         answer = raw_input("PBIS is not installed. Would you like to install it? (Y/N)").lower()
