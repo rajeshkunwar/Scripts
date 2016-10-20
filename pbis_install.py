@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-import os
+import os # good for running shell commands
 import time
 import subprocess # better for storing shell output to a variable instead of using os.system
 
@@ -9,7 +9,7 @@ import subprocess # better for storing shell output to a variable instead of usi
 
 def pbisDir():
         dir = "/opt/pbis"
-        return os.path.isdir(dir)
+        return os.path.isdir(dir)       # Returns True/False value
 
 # Method to check the pbis version
 
@@ -43,7 +43,7 @@ else:
         osType = subprocess.Popen(osType, stdout=subprocess.PIPE,shell=True)
         output, err = osType.communicate()
 
-        if "Red Hat" in output:
+        if "Red Hat" in output:        
                 print "Redhat system found"
                 time.sleep(2)
 
@@ -51,7 +51,7 @@ else:
                         print "PBIS is installed. Checking PBIS version......"
                         time.sleep(2)
                         pbisVersion()
-                        answer = raw_input("Update PBIS to latest version? (Y/N)").lower()
+                        answer = raw_input("Update PBIS to latest version? (Y/N)").lower()  
 
                         if answer == "y" or answer == "yes":
                                 redhatInstall()
