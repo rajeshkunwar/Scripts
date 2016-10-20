@@ -7,19 +7,24 @@ import subprocess # better for storing shell output to a variable instead of usi
 
 class pbis:
 
+        # Properties of pbis class
+        dir = "/opt/pbis"
+        version = "/opt/pbis/bin/pbis-status | grep -i 'compiled daemon version' | awk '{print($4)}'"
+
         #Method to check pbis dir
+
         def pbisDir(self):
-                dir = "/opt/pbis"
-                return os.path.isdir(dir)
+                return os.path.isdir(self.dir)
 
-        # Method to check the pbis version
+# Method to check the pbis version
+
         def pbisVersion(self):
-                pbisVersion = "/opt/pbis/bin/pbis-status | grep -i 'Compiled daemon version' | awk '{print($4)}'"
-                pbisVersion = subprocess.Popen(pbisVersion, stdout=subprocess.PIPE,shell=True)
-                output, err = pbisVersion.communicate()
-                print "The installed PBIS version is:", output
+                version = subprocess.Popen(self.version, stdout=subprocess.PIPE,shell=True)
+                version, err = version.communicate()
+                print "The installed PBIS version is:", version
 
-        #Method for redhat install
+#Method for redhat install
+
         def redhatInstall(self):
                 repo = "wget -O /etc/yum.repos.d/pbiso.repo http://repo.pbis.beyondtrust.com/yum/pbiso.repo"
                 repo = subprocess.Popen(repo, stdout=subprocess.PIPE,shell=True)
@@ -27,7 +32,8 @@ class pbis:
                 os.system("yum clean all")
                 os.system("yum install -y pbis-open")
 
-        #Method for ubuntu install
+#Method for ubuntu install
+
         def ubuntuInstall(self):
                 os.system("wget -O - http://repo.pbis.beyondtrust.com/yum/RPM-GPG-KEY-pbis|sudo apt-key add -")
                 os.system("sudo wget -O /etc/apt/sources.list.d/pbiso.list http://repo.pbis.beyondtrust.com/apt/pbiso.list")
@@ -40,29 +46,28 @@ else:
         osType = "lsb_release -a | grep -i 'description'"
         osType = subprocess.Popen(osType, stdout=subprocess.PIPE,shell=True)
         output, err = osType.communicate()
-        version = pbis()        # Instance of pbis class
-        install = pbis()        # Another instance         
-        dir = pbis()            # Another one
-        
+        version = pbis()
+        install = pbis()
+        dir = pbis()
         if "Red Hat" in output:
                 print "Redhat system found"
                 time.sleep(2)
 
-                if dir.pbisDir() == True:       # dir object accessing the pbisDir method
+                if dir.pbisDir() == True:
                         print "PBIS is installed. Checking PBIS version......"
                         time.sleep(2)
-                        version.pbisVersion()   # version object accessing the pbisVersion method
+                        version.pbisVersion()
                         answer = raw_input("Update PBIS to latest version? (Y/N)").lower()
 
                         if answer == "y" or answer == "yes":
-                                install.redhatInstall() # install object accessing the redhatInstall method
+                                install.redhatInstall()
 
                 else:
                         answer = raw_input("PBIS is not installed. Would you like to install it? (Y/N)").lower()
 
                         if answer == "y" or answer == "yes":
                                 install = pbis()
-                                install.redhatInstall() 
+                                install.redhatInstall()
 
         elif "Ubuntu" in output:
                 print "Ubuntu system found"
@@ -71,17 +76,17 @@ else:
                 if pbisDir() == True:
                         print "PBIS is installed. Checking PBIS version......."
                         time.sleep(2)
-                        version.pbisVersion()   # version object accessing the pbisVersion method
+                        version.pbisVersion()
                         answer = raw_input("Update PBIS to latest version? (Y/N)").lower()
 
                         if answer == "y" or answer == "yes":
-                                install.ubuntuInstall() # install object accessing the ubuntuInstall method
+                                install.ubuntuInstall()
 
                 else:
                         answer = raw_input("PBIS is not installed. Would you like to install it? (Y/N)").lower()
 
                         if answer == "y" or answer == "yes":
-                                insatll.ubuntuInstall() 
+                                insatll.ubuntuInstall()
 
         else:
                 print "OS not supported"
