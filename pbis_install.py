@@ -17,14 +17,12 @@ class pbis:
                 return os.path.isdir(self.dir)  # self can access the property of the class and alawys refers to the instance of the class.
 
         # Method to check the pbis version
-
         def pbisVersion(self):
                 version = subprocess.Popen(self.version, stdout=subprocess.PIPE,shell=True)
                 version, err = version.communicate()
                 print "The installed PBIS version is:", version
 
         #Method for redhat install
-
         def redhatInstall(self):
                 repo = "wget -O /etc/yum.repos.d/pbiso.repo http://repo.pbis.beyondtrust.com/yum/pbiso.repo"
                 repo = subprocess.Popen(repo, stdout=subprocess.PIPE,shell=True)
@@ -33,12 +31,18 @@ class pbis:
                 os.system("yum install -y pbis-open")
 
         #Method for ubuntu install
-
         def ubuntuInstall(self):
                 os.system("wget -O - http://repo.pbis.beyondtrust.com/yum/RPM-GPG-KEY-pbis|sudo apt-key add -")
                 os.system("sudo wget -O /etc/apt/sources.list.d/pbiso.list http://repo.pbis.beyondtrust.com/apt/pbiso.list")
                 os.system("sudo apt get update && sudo apt-get --assume-yes install pbis-open")
-
+                
+        #Some preTasks before joining to the domain
+        def preTasks(self):
+                os.system("/opt/pbis/bin/regshell set_value '[HKEY_THIS_MACHINE\Services\lsass\Parameters\Providers\Local]' LoginShellTemplate /bin/bash")
+                os.system("/opt/pbis/bin/regshell set_value '[HKEY_THIS_MACHINE\Services\lsass\Parameters\Providers\ActiveDirectory]' LoginShellTemplate /bin/bash")
+                os.system("/opt/pbis/bin/config NssEnumerationEnabled false && /opt/pbis/bin/config --dump|grep -i NssEnumerationEnabled")
+                
+             
 if not os.geteuid() == 0:
         sys.exit('Script must be run as root')
 
@@ -61,6 +65,7 @@ else:
 
                         if answer == "y" or answer == "yes":
                                 install.redhatInstall()
+                                preTasks.pbis()
 
                 else:
                         answer = raw_input("PBIS is not installed. Would you like to install it? (Y/N)").lower()
@@ -68,6 +73,7 @@ else:
                         if answer == "y" or answer == "yes":
                                 install = pbis()
                                 install.redhatInstall()
+                                preTasks.pbis()
 
         elif "Ubuntu" in output:
                 print "Ubuntu system found"
@@ -81,12 +87,14 @@ else:
 
                         if answer == "y" or answer == "yes":
                                 install.ubuntuInstall()
+                                preTasks.pbis()
 
                 else:
                         answer = raw_input("PBIS is not installed. Would you like to install it? (Y/N)").lower()
 
                         if answer == "y" or answer == "yes":
                                 insatll.ubuntuInstall()
+                                preTasks.pbis()
 
         else:
                 print "OS not supported"
