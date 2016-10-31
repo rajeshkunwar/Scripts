@@ -12,7 +12,6 @@ class pbis:
         version = "/opt/pbis/bin/pbis-status | grep -i 'compiled daemon version' | awk '{print($4)}'"
 
         #Method to check pbis dir
-
         def pbisDir(self):
                 return os.path.isdir(self.dir)  # self can access the property of the class and alawys refers to the instance of the class.
 
@@ -41,7 +40,11 @@ class pbis:
                 os.system("/opt/pbis/bin/regshell set_value '[HKEY_THIS_MACHINE\Services\lsass\Parameters\Providers\Local]' LoginShellTemplate /bin/bash")
                 os.system("/opt/pbis/bin/regshell set_value '[HKEY_THIS_MACHINE\Services\lsass\Parameters\Providers\ActiveDirectory]' LoginShellTemplate /bin/bash")
                 os.system("/opt/pbis/bin/config NssEnumerationEnabled false && /opt/pbis/bin/config --dump|grep -i NssEnumerationEnabled")
-                
+
+        version = pbis()        # One instance
+        install = pbis()        # Another instance
+        pretaks = pbis()        # Another one
+        dir = pbis()            # one more
              
 if not os.geteuid() == 0:
         sys.exit('Script must be run as root')
@@ -50,9 +53,7 @@ else:
         osType = "lsb_release -a | grep -i 'description'"
         osType = subprocess.Popen(osType, stdout=subprocess.PIPE,shell=True)
         output, err = osType.communicate()
-        version = pbis()        # One instance
-        install = pbis()        # Another instance
-        dir = pbis()            # One more
+                
         if "Red Hat" in output:
                 print "Redhat system found"
                 time.sleep(2)
@@ -65,7 +66,7 @@ else:
 
                         if answer == "y" or answer == "yes":
                                 install.redhatInstall()
-                                preTasks.pbis()
+                                pretasks.preTasks()
 
                 else:
                         answer = raw_input("PBIS is not installed. Would you like to install it? (Y/N)").lower()
@@ -73,13 +74,13 @@ else:
                         if answer == "y" or answer == "yes":
                                 install = pbis()
                                 install.redhatInstall()
-                                preTasks.pbis()
+                                preTasks.preTasks()
 
         elif "Ubuntu" in output:
                 print "Ubuntu system found"
                 time.sleep(2)
 
-                if pbisDir() == True:
+                if dir.pbisDir() == True:
                         print "PBIS is installed. Checking PBIS version......."
                         time.sleep(2)
                         version.pbisVersion()
@@ -87,14 +88,14 @@ else:
 
                         if answer == "y" or answer == "yes":
                                 install.ubuntuInstall()
-                                preTasks.pbis()
+                                pretasks.preTasks()
 
                 else:
                         answer = raw_input("PBIS is not installed. Would you like to install it? (Y/N)").lower()
 
                         if answer == "y" or answer == "yes":
                                 insatll.ubuntuInstall()
-                                preTasks.pbis()
+                                pretasks.Pretasks()
 
         else:
                 print "OS not supported"
