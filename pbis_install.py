@@ -41,10 +41,10 @@ class pbis:
                 os.system("/opt/pbis/bin/regshell set_value '[HKEY_THIS_MACHINE\Services\lsass\Parameters\Providers\ActiveDirectory]' LoginShellTemplate /bin/bash")
                 os.system("/opt/pbis/bin/config NssEnumerationEnabled false && /opt/pbis/bin/config --dump|grep -i NssEnumerationEnabled")
 
-        version = pbis()        # One instance
-        install = pbis()        # Another instance
-        pretaks = pbis()        # Another one
-        dir = pbis()            # one more
+version = pbis()        # One instance
+install = pbis()        # Another instance
+pretaks = pbis()        # Another one
+dir = pbis()            # one more
              
 if not os.geteuid() == 0:
         sys.exit('Script must be run as root')
