@@ -33,7 +33,7 @@ class pbis:
         def ubuntuInstall(self):
                 os.system("wget -O - http://repo.pbis.beyondtrust.com/yum/RPM-GPG-KEY-pbis|sudo apt-key add -")
                 os.system("sudo wget -O /etc/apt/sources.list.d/pbiso.list http://repo.pbis.beyondtrust.com/apt/pbiso.list")
-                os.system("sudo apt get update && sudo apt-get --assume-yes install pbis-open")
+                os.system("sudo apt-get update && sudo apt-get --assume-yes install pbis-open")
                 
         #Some preTasks before joining to the domain
         def preTasks(self):
