@@ -1,17 +1,14 @@
-import requests
 import json
 import paramiko
 imprt pymysql
 
 # This is written to collect data from different nimble arrays for using with grafana. The setup includes having a config.json from where 
-#all the configs are read.
+# all the configs are read.
 # You could have an environment where you could have an iscsi or fibre nimble arrays and at different locations. All these configs are 
 # defined in the config.json file.
-# The collected data are written to a mysql database which can later be used as as data source for the grafana.
+# The collected data are written to a mysql database which can later be used as a data source for the grafana.
 # Also config.json is the file where all the credentials are kept.
 
-# Disable SSL warnings
-request.package.urllib3.disable_warnings()
 
 # Function that reads and returns configs from JSON file and exits if no configs are found
 def get_config(config):
@@ -45,9 +42,9 @@ def get_config(config):
     else:
       print('N config found')
       exit()
+
       
 # Function to ssh to the nimble server and return total, used, free and percentage used capacities.
-
 def ssh(host, username, password, port, command):
   client = paramiko.SSHClient()
   clent.set_missing_key_policy(paramiko.AutoAddPolicy())
@@ -90,7 +87,3 @@ def ssh(host, username, password, port, command):
     connection.close()
     
     return cur.fetchall()
-  
-  
-  
-  
