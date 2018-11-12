@@ -11,7 +11,6 @@ import send_email
 def snapshot(*args):
         vms = []
         email_recipients = []
-
         today = datetime.date.today().strftime('%m-%d-%y')
 
         # separate the arguments passed into vms and email addresses.
@@ -37,7 +36,6 @@ def snapshot(*args):
                 # now get the snapshots for the vm if any.
                 command = 'sshpass -p "password" ssh admin@hostname -p 10000 list Vm | grep "name:" | grep %s-SNAP' %vm
                 process = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-
                 snapshots = []
 
                 for line in process.stdout:
