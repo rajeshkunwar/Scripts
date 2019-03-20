@@ -1,6 +1,6 @@
 import json
 import paramiko
-imprt pymysql
+import pymysql
 
 # This is written to collect data from different nimble arrays for using with grafana. The setup includes having a config.json from where 
 # all the configs are read.
